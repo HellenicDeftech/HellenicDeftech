@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hellenic DefTech 2025</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="particles.js"></script>
+</head>
+<body>
+
+    <div class="parallax-wrapper">
+
+        <div class="navbar-container">
+
+            <div class="nav-logo">
+                <img src="images/Hellenic_Deftech_logo.jpg" height="50" style="margin-top: 4px; border-radius: 4px;"/>
+            </div>
+
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#οrganizers">Organizers</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#location">Location</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-logreg" id="user-area">
+                <a href="loginregister.html">Login/Register</a>
+            </div>
+            
+        </div>
+
+        <div class="menu-icon" onclick="toggleMobileMenu()"><i class="fa fa-bars"></i></div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#οrganizers">Organizers</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#location">Location</a></li>
+
+                <div class="mobile-nav-logreg" id="mobile-user-area">
+                    <a href="loginregister.html">Login/Register</a>
+                </div>
+            </ul>
+        </div>
+
+
+        <section class="parallax" id="home">
+            <!-- particles.js container -->
+            <div id="particles-js" style="position: absolute;"></div>
+                
+            <div class="home-text">
+                <h1>Hellenic DefTech 2025</h1>
+            </div>
+
+        </section>
+
+        <section class="content-section blue" id="about">
+            <h1>About</h1>
+            <p style="text-align: justify; margin-bottom: 18px; ">Hellenic DefTech 2025 is a premier technology and defense conference taking place on October 18-19 2025, in Samos, Greece. Bringing together experts, professionals, students, and innovators, the conference explores the rapidly evolving fields of technology, cybersecurity, and defense.</p>
+
+            <p style="text-align: justify; margin-bottom: 18px;">This two days event aims to foster dialogue, collaboration, and innovation at the intersection of national security, emerging technologies, and digital defense technologies. Attendees will have the opportunity to engage in keynote speeches, technical workshops, live demonstrations, 
+                and panel discussions led by distinguished speakers from academia, industry, and the armed forces.</p>
+
+            <p style="text-align: justify; margin-bottom: 40px;">Whether you're a student looking to learn from top experts, a researcher exploring the next breakthrough, or a professional working on the frontlines of defense technology, Hellenic DefTech 2025 offers a dynamic platform for sharing knowledge and networking.</p>
+
+            <p style="font-weight: bold;">Join us in shaping the future of tech and defense in the heart of the Aegean.</p>
+
+        </section>
+
+        <section class="content-section white" id="οrganizers">
+            <h1>Organizers</h1>
+            <div class="organizers">
+                <div>
+                    <h2>Western Samos Municipality</h2>
+                    <br>
+                    <img src="images/dhmos_dyt_samou.png" alt="" width="350px">
+                </div>
+                <div>
+                    <h2>IEEE Aegean SB</h2>
+                    <br>
+                    <img src="images/ieee_aegean.png" alt="" width="380px">
+                </div>
+            </div>
+            <br><br>
+            <h2>UWC Samos</h2>
+            <div class="organizers" style="gap: 0px;">
+                
+                <div>   
+                    <img src="images/eoss_logo.png" alt="" width="400px">
+                </div>
+                <iframe style="border-radius: 4px; border: none;" width="500" height="282"
+                    src="https://www.youtube.com/embed/jH5pHqYUX1c"
+                    title="YouTube video"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+
+            </div>
+            
+        </section>
+
+        <section class="content-section blue" id="contact">
+            <h1>Want to sponsor?</h1>
+            <p>
+            Would you like to support Hellenic DefTech 2025?
+            </p>
+            <br>
+            <p> 
+            We are looking for sponsors and partners who share our vision of strengthening technological education and innovation.
+            </p>
+            <p>
+            Contact us at <a href="#">hellenicdeftech@gmail.com</a> or <a href="#" onclick="openSponsorPopup()" class="sponsor-link">fill out the sponsorship form</a>.
+            </p>
+
+        </section>
+
+
+        <section class="content-section white" id="location">
+            <h1>Location</h1>
+            <p>Samos Karlovasi</p>
+            <div style="margin-top: 20px;">
+                <iframe style="border-radius: 8px; border: none;"   src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d655.3655160555708!2d26.681875201240743!3d37.794300355099004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sel!2sgr!4v1751979824186!5m2!1sel!2sgr" 
+                width="800" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; Hellenic DefTech 2025</p>
+
+            <br><br><br>
+
+            <h4>Don't forget to follow us!</h4>
+
+            <div class="social-icons">
+                <i class="fa fa-instagram"></i>
+                <i class="fa fa-facebook"></i>
+            </div>
+            
+        </footer>
+
+    </div>
+
+
+    <div id="sponsorPopup" class="popup-hidden">
+        <div class="popup-box">
+            <button onclick="closeSponsorPopup()" class="popup-close">×</button>
+            <h3>Become a Sponsor</h3>
+            <form id="sponsorForm">
+            <input type="text" id="sponsorName" placeholder="Your Name" required>
+            <input type="email" id="sponsorEmail" placeholder="Your Email" required>
+            <input type="text" id="sponsorCompany" placeholder="Company Name" required>
+            <textarea id="sponsorMessage" placeholder="Your Message" rows="4" required></textarea>
+            <button type="submit">Submit</button>
+            </form>
+            <p id="sponsorResponse" style="margin-top:10px; font-weight:bold;"></p>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="functions.js"></script>
+    <script src="particles.js"></script>
+
+    <script>
+
+        checkLoggedUser();
+
+        window.addEventListener("DOMContentLoaded", initGoogleQR);
+
+        // Parallax
+        document.querySelector(".parallax-wrapper").addEventListener("scroll", function () {
+            const nav = document.querySelector(".navbar-container");
+            const scrollTop = this.scrollTop;
+
+            if (scrollTop > 0) {
+                nav.classList.add("scrolled");
+            } else {
+                nav.classList.remove("scrolled");
+            }
+        });
+
+        // sponsor popup
+        function openSponsorPopup() {
+            document.getElementById("sponsorPopup").classList.add("popup-visible");
+            document.getElementById("sponsorPopup").classList.remove("popup-hidden");
+        }
+
+        function closeSponsorPopup() {
+            document.getElementById("sponsorPopup").classList.remove("popup-visible");
+            document.getElementById("sponsorPopup").classList.add("popup-hidden");
+        }
+
+
+        // Sponsor form email
+        document.getElementById("sponsorForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("sponsorName").value.trim();
+            const email = document.getElementById("sponsorEmail").value.trim();
+            const company = document.getElementById("sponsorCompany").value.trim();
+            const message = document.getElementById("sponsorMessage").value.trim();
+            const status = document.getElementById("sponsorResponse");
+
+            if (!name || !email || !company || !message) {
+                status.textContent = "Please fill in all fields.";
+                status.style.color = "red";
+                return;
+            }
+
+            status.textContent = "Sending...";
+            status.style.color = "black";
+
+            try {
+                const response = await fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/sponsor-email", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, email, company, message })
+                });
+
+                if (response.ok) {
+                    status.textContent = "✅ Thank you! We'll contact you soon.";
+                    status.style.color = "green";
+                    document.getElementById("sponsorForm").reset();
+                } else {
+                    const err = await response.json();
+                    status.textContent = "❌ Failed to send.";
+                    status.style.color = "red";
+                    console.error("Server error:", err);
+                }
+            } catch (err) {
+                status.textContent = "❌ Network error.";
+                status.style.color = "red";
+                console.error("Fetch error:", err);
+            }
+        });
+
+
+
+
+        //mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const menuElements = document.querySelectorAll('#mobileMenu a');
+            if (menu.style.opacity == 1) {
+                menu.style.pointerEvents = 'none';
+                menuElements.forEach(element => {
+                element.style.pointerEvents = 'none';
+                });
+                menu.style.opacity = 0;
+                menu.style.transform = 'translateX(-20px)';
+            } else {
+                menu.style.pointerEvents = 'auto';
+                menuElements.forEach(element => {
+                element.style.pointerEvents = 'auto';
+                });
+                menu.style.opacity = 1;
+                menu.style.transform = 'translateX(0px)';
+            }
+        }
+
+
+        // Particles
+        particlesJS('particles-js', {
+        particles: {
+            number: { value: 80 },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1
+            },
+            move: { enable: true, speed: 6 }
+        }
+        });
+
+
+
+    </script>
+
+
+
+
+</body>
+</html>

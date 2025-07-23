@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="container">
+    <h2 style="text-align:center; margin-bottom: 20px;">Admin Dashboard</h2>
+
+    <div>
+      
+      <h2 style="margin-top: 30px;">User Papers</h2>
+      <table cellpadding="10" style="width: 100%; margin-top: 15px; text-align: left; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th># Papers</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userPaperTable"></tbody>
+      </table>
+
+      <button class="paper-btn" onclick="logout()" style="color: red;">Logout</button>
+      <button class="paper-btn" onclick="window.location.href = 'index.html'" style="margin-top: 20px;">Back to Home</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="functions.js"></script>
+  <script>
+    const allowedAdmins = [
+      "0f53d8b0-6988-4964-8eb0-3b148b90f3cb", // βάλε εδώ το δικό σου UID
+      "1eac4567-89ab-4cd1-bcde-7f8a9e0c1b2d"
+    ];
+
+    (async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+
+      if (error || !session || !session.user) {
+        alert("Unauthorized");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const uid = session.user.id;
+
+      if (!allowedAdmins.includes(uid)) {
+        alert("You are not authorized to view this page.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const res = await fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-dashboard");
+      const json = await res.json();
+
+      const { users, papers, error: fetchError } = json;
+
+      if (fetchError || !Array.isArray(users) || !Array.isArray(papers)) {
+        console.error("❌ Error loading data:", fetchError, users, papers);
+        alert("Error loading dashboard data.");
+        return;
+      }
+
+      const tableBody = document.getElementById("userPaperTable");
+      tableBody.innerHTML = "";
+
+      users.forEach(user => {
+        const count = papers.filter(p => p.userid === user.id).length;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.user_metadata?.full_name || "-"}</td>
+          <td>${user.email}</td>
+          <td>${count}</td>
+          <td><button class="paper-btn" onclick="togglePapers('${user.id}', this)">View</button></td>
+        `;
+        tableBody.appendChild(row);
+
+        const paperRow = document.createElement("tr");
+        paperRow.innerHTML = `<td colspan="4"><div class="papers-container" style="display:none;"></div></td>`;
+        tableBody.appendChild(paperRow);
+      });
+    })();
+
+    async function togglePapers(userId, button) {
+      const container = button.parentElement.parentElement.nextElementSibling.querySelector('.papers-container');
+
+      if (container.style.display === "none") {
+        const { data, error } = await supabase
+          .from("docs")
+          .select("id, title, description, file_path, created_at")
+          .eq("userid", userId)
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error loading docs:", error);
+          container.innerHTML = "Failed to load.";
+          return;
+        }
+
+        if (!data.length) {
+          container.innerHTML = "<p style='color: gray;'>No papers uploaded.</p>";
+        } else {
+          container.innerHTML = data.map(doc => {
+            const ext = doc.file_path.split('.').pop().toLowerCase();
+            return `
+              <div style="margin: 10px 0; border:1px solid #ccc; padding:10px; border-radius:8px;">
+                <strong>${doc.title}</strong><br>
+                <em>${doc.description || ""}</em><br>
+                <small>${new Date(doc.created_at).toLocaleString()}</small><br>
+                <button class="paper-btn" onclick="previewDoc('${doc.file_path}', '${ext}', this)">Preview</button>
+                <div class="preview-container" style="margin-top:10px; display:none;"></div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        container.style.display = "block";
+        button.textContent = "Hide";
+      } else {
+        container.style.display = "none";
+        button.textContent = "View";
+      }
+    }
+
+    async function previewDoc(filePath, ext, btn) {
+      const container = btn.nextElementSibling;
+
+      if (container.style.display === "none") {
+        const { data, error } = await supabase
+          .storage
+          .from("docs-bucket")
+          .createSignedUrl(filePath, 300);
+
+        if (error) {
+          alert("Failed to preview file.");
+          return;
+        }
+
+        const url = data.signedUrl;
+        container.innerHTML = (ext === 'pdf') 
+          ? `<iframe src="${url}" width="680px" height="380px" style="border:1px solid #ccc;"></iframe>`
+          : `<a href="${url}" target="_blank">Download File</a>`;
+
+        container.style.display = "block";
+        btn.textContent = "Hide";
+      } else {
+        container.style.display = "none";
+        btn.textContent = "Preview";
+      }
+    }
+  </script>
+</body>
+</html>

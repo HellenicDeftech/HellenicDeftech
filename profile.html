@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - DefTech</title>
+  <link rel="shortcut icon" href="#">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/profile.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head> 
+<body onload="document.querySelector('.tab.active').click()">
+
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:20px;">Welcome, <span id="profileName">User</span></h2>
+
+        <div class="tabs">
+            <div class="tab active" onclick="openTab('settings', this)">Profile</div>
+            <div class="tab" onclick="openTab('mypapers', this)">My Papers</div>
+            <div class="tab-indicator"></div>
+        </div>
+
+
+        
+        <div class="tab-content profile" id="settings">
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 60px; flex-wrap: wrap;">
+            
+            <div style="flex: 1; text-align: center; margin-top: 40px;">
+              <h2 style="margin-bottom: 10px;">Profile Info</h2>
+              <br>
+              <p><strong>Name:</strong> <span id="profileFullName">-</span></p>
+              <p><strong>Email:</strong> <span id="profileEmail">-</span></p>
+              <p><strong>Joined at:</strong> <span id="profileJoined">-</span></p>
+
+              <button class="paper-btn" onclick="logout()" style="color: rgb(255, 0, 0);">Logout</button>
+              <button class="paper-btn" onclick="window.location.href = 'index.html'" style="margin-top: 20px;">Back to Home</button>
+
+            </div>
+
+            
+            <div style="flex: 1; text-align: center;">
+              <p style="margin-bottom: 10px;">Your personal QR Code:</p>
+              <div id="qrcode" style="margin-bottom: 10px;"></div>
+              <button class="paper-btn" onclick="downloadQR()">Download QR</button>
+            </div>
+
+          </div>
+
+            <h2 style="color: red; margin-top: 80px;">DANGER ZONE</h2>
+            <button onclick="deleteUserAccount()" style="margin-top: 10px; background-color: red; color: white; padding: 10px; border-radius: 8px; border: none;">
+            Delete My Account
+            </button>
+
+        </div>
+
+        <div class="tab-content" id="mypapers">
+            <center><h3>Upload a paper only if you want to present it at the conference</h3></center>
+            <br>
+            <div class="upload-form">
+                <input type="text" id="titleInput" placeholder="Paper Title">
+                <textarea id="descInput" placeholder="Short Description"></textarea>
+                <input type="file" id="fileInput" accept=".pdf,.ppt,.pptx">
+                <button onclick="uploadDoc()">Upload</button>
+            </div>
+            <ul id="docList"></ul>
+        </div>
+    </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="functions.js"></script>
+  <script>
+    getSession();
+
+    supabase.auth.getUser().then(({ data }) => {
+      const fullname = data?.user?.user_metadata?.full_name || "User";
+      document.getElementById('profileName').textContent = fullname;
+    });
+
+    supabase.auth.getUser().then(({ data }) => {
+      const fullname = data?.user?.user_metadata?.full_name || "-";
+      document.getElementById('profileFullName').textContent = fullname;
+    });
+
+    supabase.auth.getUser().then(({ data }) => {
+      const email = data?.user?.user_metadata?.email || "-";
+      document.getElementById('profileEmail').textContent = email;
+    });
+
+    supabase.auth.getUser().then(({ data }) => {
+      const isoDate = data?.user?.created_at?.split("T")[0];
+      const [year, month, day] = isoDate ? isoDate.split("-") : ["-", "-", "-"];
+      document.getElementById('profileJoined').textContent = `${day}-${month}-${year}`;
+    });
+
+    window.addEventListener("DOMContentLoaded", async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session || !session.user) {
+            alert("Πρέπει να συνδεθείς πρώτα.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        currentUserId = session.user.id;
+
+        await loadProfileQR(currentUserId);
+    });
+
+
+
+    
+  </script>
+</body>
+</html>
