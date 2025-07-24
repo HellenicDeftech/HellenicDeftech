@@ -131,20 +131,26 @@
       const container = btn.nextElementSibling;
 
       if (container.style.display === "none") {
-        const { data, error } = await supabase
-          .storage
-          .from("docs-bucket")
-          .createSignedUrl(filePath, 300);
+        const res = await fetch(
+          "https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-preview",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filePath })
+          }
+        );
 
-        if (error) {
-          alert("Failed to preview file.");
+        const json = await res.json();
+        if (!json.url) {
+          alert("Failed to get preview URL");
           return;
         }
 
-        const url = data.signedUrl;
-        container.innerHTML = (ext === 'pdf') 
-          ? `<iframe src="${url}" width="680px" height="380px" style="border:1px solid #ccc;"></iframe>`
-          : `<a href="${url}" target="_blank">Download File</a>`;
+        const url = json.url;
+        container.innerHTML =
+          ext === "pdf"
+            ? `<embed src="${url}" type="application/pdf" width="680px" height="380px" style="border:1px solid #ccc;" />`
+            : `<a href="${url}" target="_blank">Download File</a>`;
 
         container.style.display = "block";
         btn.textContent = "Hide";
@@ -153,6 +159,8 @@
         btn.textContent = "Preview";
       }
     }
+
+
   </script>
 </body>
 </html>

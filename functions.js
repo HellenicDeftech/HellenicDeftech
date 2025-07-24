@@ -316,59 +316,73 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     
     async function uploadDoc() {
-        const file = document.getElementById('fileInput').files[0];
-        const title = document.getElementById('titleInput').value.trim();
-        const description = document.getElementById('descInput').value.trim();
+      const file = document.getElementById('fileInput').files[0];
+      const title = document.getElementById('titleInput').value.trim();
+      const description = document.getElementById('descInput').value.trim();
 
-        if (!file || !currentUserId) {
-            alert("Please fill all fields.");
-            return;
-        }
+      if (!file || !currentUserId) {
+          alert("Please fill all fields.");
+          return;
+      }
 
-        const allowedExtensions = ['pdf', 'ppt', 'pptx'];
-        const ext = file.name.split('.').pop().toLowerCase();
+      const allowedExtensions = ['pdf', 'ppt', 'pptx'];
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(ext)) {
+          alert("Please upload a PDF, PPT or PPTX file.");
+          return;
+      }
 
-        if (!allowedExtensions.includes(ext)) {
-            alert("Please upload a PDF, PPT or PPTX file.");
-            return;
-        }
+      const { data: oldDoc, error: fetchError } = await supabase
+          .from('docs')
+          .select('file_path')
+          .eq('userid', currentUserId)
+          .single();
 
-        const filePath = `${currentUserId}/${Date.now()}.${ext}`;
+      if (fetchError && fetchError.code !== 'PGRST116') {
+          console.error("Error checking old doc:", fetchError);
+          alert("Something went wrong while checking old file.");
+          return;
+      }
 
-        const { error: uploadError } = await supabase.storage
-            .from('docs-bucket')
-            .upload(filePath, file);
+      if (oldDoc?.file_path) {
+          await supabase.storage.from('docs-bucket').remove([oldDoc.file_path]);
+      }
 
-        if (uploadError) {
-            alert("Failed to upload file.");
-            console.error(uploadError);
-            return;
-        }
+      const filePath = `${currentUserId}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+          .from('docs-bucket')
+          .upload(filePath, file);
 
-        const { error: insertError } = await supabase
-            .from('docs')
-            .insert([{
-            title,
-            description,
-            file_path: filePath,
-            userid: currentUserId
-            }]);
+      if (uploadError) {
+          alert("Failed to upload file.");
+          console.error(uploadError);
+          return;
+      }
+
+      const { error: upsertError } = await supabase
+          .from('docs')
+          .upsert({
+              userid: currentUserId,  // UID auth
+              title,
+              description,
+              file_path: filePath
+          }, { onConflict: 'userid' });
+
+      if (upsertError) {
+          alert("Failed to save document.");
+          console.error(upsertError);
+          return;
+      }
+
+      alert("✅ Your document was uploaded and replaced the old one!");
+      document.getElementById('fileInput').value = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('descInput').value = '';
+
+      loadDocs();
+  }
 
 
-        if (insertError) {
-            alert("Failed to insert document.");
-            console.error(insertError);
-            return;
-        }
-
-        alert("Paper uploaded successfully.");
-
-        document.getElementById('fileInput').value = '';
-        document.getElementById('titleInput').value = '';
-        document.getElementById('descInput').value = '';
-
-        loadDocs();
-    }
 
     
     async function loadDocs() {
