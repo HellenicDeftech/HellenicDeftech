@@ -3,7 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: "Barlow", sans-serif;
+
 }
 
 :root {
@@ -91,7 +92,6 @@ body {
 }
 
 
-
 /*-------------- Navbar --------------*/
 
 .navbar-container {
@@ -134,7 +134,7 @@ body {
 }
 
 .navbar {
-    margin-left: 110px;
+    margin-left: 85px;
     display: flex;
     align-items: center;
 }
@@ -316,7 +316,6 @@ body {
     0 3px 0 #c7c7c7,
     0 4px 0 #c7c7c7,
     0 5px 0 #c7c7c7,
-    0 6px 0 #c7c7c7,
   
     1px 15px 10px rgba(16, 16, 16, 0.3),
     1px 20px 20px rgba(16, 16, 16, 0.2),
@@ -370,6 +369,7 @@ body {
     margin-top: 15px;
     background-color: #0074d9;
     color: white;
+    font-weight: bold;
     border: none;
     padding: 10px 20px;
     border-radius: 6px;

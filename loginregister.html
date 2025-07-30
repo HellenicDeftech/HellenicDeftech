@@ -60,16 +60,16 @@
     <div class="toggle-container">
       <div class="toggle">  
         <div class="toggle-panel toggle-left">
-          <h2>Welcome Back!</h2>
-          <p>Already have an account?</p>
-          <button class="hidden" id="login">Login</button>
+          <h2>New Here?</h2>
+          <p>Don't have an account?</p>
+          <button class="hidden" id="register">Register</button>
           
         </div>
 
         <div class="toggle-panel toggle-right">
-          <h2>New Here?</h2>
-          <p>Don't have an account?</p>
-          <button class="hidden" id="register">Register</button>
+          <h2>Welcome Back!</h2>
+          <p>Already have an account?</p>
+          <button class="hidden" id="login">Login</button>
           
         </div>
       </div>
@@ -89,11 +89,11 @@
     const loginBtn = document.getElementById('login');
 
     registerBtn.addEventListener('click', () => {
-        container.classList.add("active");
+        container.classList.remove("active");
     });
 
     loginBtn.addEventListener('click', () => {
-        container.classList.remove("active");
+        container.classList.add("active");
     });
   </script>
 

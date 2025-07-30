@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
   <div class="container">
     <h2 style="text-align:center; margin-bottom: 20px;">Admin Dashboard</h2>
 
-    <div>
-      
+    <div class="tabs">
+      <div class="tab active" onclick="openAdminTab('dashboard', this)">User Papers</div>
+      <div class="tab" onclick="openAdminTab('visitlogs', this)">Visit Logs</div>
+      <div class="tab" onclick="openAdminTab('analytics', this)">Analytics</div>
+      <div class="tab-indicator"></div>
+    </div>
+
+    <div class="tab-content active" id="dashboard">
       <h2 style="margin-top: 30px;">User Papers</h2>
-      <table cellpadding="10" style="width: 100%; margin-top: 15px; text-align: left; border-collapse: collapse;">
+      <table cellpadding="10">
         <thead>
           <tr>
             <th>User</th>
@@ -25,30 +33,52 @@
       </table>
 
       <button class="paper-btn" onclick="logout()" style="color: red;">Logout</button>
-      <button class="paper-btn" onclick="window.location.href = 'index.html'" style="margin-top: 20px;">Back to Home</button>
+      <button class="paper-btn" onclick="window.location.href = 'index.html'" style="margin-top: 20px;">Back to
+        Home</button>
     </div>
+
+    <div class="tab-content" id="visitlogs">
+      <h3>Visit Logs</h3>
+      <table cellpadding="10">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>IP</th>
+            <th>Page</th>
+          </tr>
+        </thead>
+        <tbody id="logTable"></tbody>
+      </table>
+    </div>
+
+
+    <div class="tab-content" id="analytics">
+      <h3>Google Analytics Overview</h3>
+      <button class="paper-btn" id="ga-login">Sign in with Google</button>
+      <canvas id="gaChart" width="100%" height="300" style="margin-top:20px;"></canvas>
+    </div>
+
+
   </div>
+
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="functions.js"></script>
   <script>
+    logPageVisit();
+
+
     const allowedAdmins = [
-      "0f53d8b0-6988-4964-8eb0-3b148b90f3cb", // βάλε εδώ το δικό σου UID
-      "1eac4567-89ab-4cd1-bcde-7f8a9e0c1b2d"
+      "0f53d8b0-6988-4964-8eb0-3b148b90f3cb",
+      "1616f47f-9da3-4f50-8edd-623ca4bcbf37"
     ];
 
     (async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
-
-      if (error || !session || !session.user) {
-        alert("Unauthorized");
-        window.location.href = "index.html";
-        return;
-      }
-
-      const uid = session.user.id;
-
-      if (!allowedAdmins.includes(uid)) {
+      if (error || !session || !session.user || !allowedAdmins.includes(session.user.id)) {
         alert("You are not authorized to view this page.");
         window.location.href = "index.html";
         return;
@@ -56,7 +86,6 @@
 
       const res = await fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-dashboard");
       const json = await res.json();
-
       const { users, papers, error: fetchError } = json;
 
       if (fetchError || !Array.isArray(users) || !Array.isArray(papers)) {
@@ -67,17 +96,14 @@
 
       const tableBody = document.getElementById("userPaperTable");
       tableBody.innerHTML = "";
-
       users.forEach(user => {
         const count = papers.filter(p => p.userid === user.id).length;
-
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${user.user_metadata?.full_name || "-"}</td>
           <td>${user.email}</td>
           <td>${count}</td>
-          <td><button class="paper-btn" onclick="togglePapers('${user.id}', this)">View</button></td>
-        `;
+          <td><button class="paper-btn" onclick="togglePapers('${user.id}', this)">View</button></td>`;
         tableBody.appendChild(row);
 
         const paperRow = document.createElement("tr");
@@ -88,7 +114,6 @@
 
     async function togglePapers(userId, button) {
       const container = button.parentElement.parentElement.nextElementSibling.querySelector('.papers-container');
-
       if (container.style.display === "none") {
         const { data, error } = await supabase
           .from("docs")
@@ -114,8 +139,7 @@
                 <small>${new Date(doc.created_at).toLocaleString()}</small><br>
                 <button class="paper-btn" onclick="previewDoc('${doc.file_path}', '${ext}', this)">Preview</button>
                 <div class="preview-container" style="margin-top:10px; display:none;"></div>
-              </div>
-            `;
+              </div>`;
           }).join('');
         }
 
@@ -129,16 +153,12 @@
 
     async function previewDoc(filePath, ext, btn) {
       const container = btn.nextElementSibling;
-
       if (container.style.display === "none") {
-        const res = await fetch(
-          "https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-preview",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ filePath })
-          }
-        );
+        const res = await fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filePath })
+        });
 
         const json = await res.json();
         if (!json.url) {
@@ -147,10 +167,9 @@
         }
 
         const url = json.url;
-        container.innerHTML =
-          ext === "pdf"
-            ? `<embed src="${url}" type="application/pdf" width="680px" height="380px" style="border:1px solid #ccc;" />`
-            : `<a href="${url}" target="_blank">Download File</a>`;
+        container.innerHTML = ext === "pdf"
+          ? `<embed src="${url}" type="application/pdf" width="680px" height="380px" style="border:1px solid #ccc;" />`
+          : `<a href="${url}" target="_blank">Download File</a>`;
 
         container.style.display = "block";
         btn.textContent = "Hide";
@@ -160,7 +179,125 @@
       }
     }
 
+    async function loadVisitLogs() {
+      const { data, error } = await supabase
+        .from("logs")
+        .select("timestamp, ip, page")
+        .order("timestamp", { ascending: false });
 
+      if (error) {
+        console.error("Error loading logs:", error);
+        return;
+      }
+
+      const tbody = document.getElementById("logTable");
+      tbody.innerHTML = "";
+      data.forEach(log => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${new Date(log.timestamp).toLocaleString()}</td>
+          <td>${log.ip}</td>
+          <td>${log.page}</td>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    function openAdminTab(tabId, tabElement) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabElement.classList.add('active');
+
+      const indicator = document.querySelector('.tab-indicator');
+      const tabRect = tabElement.getBoundingClientRect();
+      const containerRect = tabElement.parentElement.getBoundingClientRect();
+      const offsetLeft = tabRect.left - containerRect.left;
+      indicator.style.transform = `translateX(${offsetLeft}px)`;
+      indicator.style.width = `${tabRect.width}px`;
+
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+
+      if (tabId === 'visitlogs') loadVisitLogs();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const initialTab = document.querySelector('.tab.active');
+      openAdminTab('dashboard', initialTab);
+    });
+
+
+
+
+    //google analytics
+
+    const CLIENT_ID = "147209736690-p7ubj6kver5p1g47hvjvkakgmmo8b3ci.apps.googleusercontent.com";
+    const PROPERTY_ID = "11558859131";
+
+    let tokenClient;
+    let access_token = null;
+
+    window.onload = () => {
+      document.getElementById("ga-login").onclick = () => {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: "https://www.googleapis.com/auth/analytics.readonly",
+          callback: async (tokenResponse) => {
+            access_token = tokenResponse.access_token;
+            await fetchGA4Data();
+          }
+        });
+        tokenClient.requestAccessToken();
+      };
+    };
+
+    async function fetchGA4Data() {
+      const today = new Date().toISOString().split("T")[0];
+      const lastWeek = new Date(Date.now() - 6 * 86400000).toISOString().split("T")[0];
+
+      const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          dateRanges: [{ startDate: "2025-01-01", endDate: "today" }],
+          dimensions: [{ name: "date" }],
+          metrics: [{ name: "activeUsers" }]
+        })
+      });
+
+      const json = await res.json();
+      if (json.rows) renderGAChart(json.rows);
+      else alert("❌ No data or error fetching GA4 data.");
+    }
+
+    function renderGAChart(rows) {
+      const labels = rows.map(row => {
+        const dateStr = row.dimensionValues[0].value;
+        return `${dateStr.slice(4, 6)}/${dateStr.slice(6)}`;
+      });
+      const data = rows.map(row => Number(row.metricValues[0].value));
+
+      new Chart(document.getElementById("gaChart"), {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Active Users",
+            data: data,
+            borderColor: "#0049a1",
+            backgroundColor: "rgba(0, 73, 161, 0.2)",
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true } }
+        }
+      });
+    }
   </script>
 </body>
+
 </html>

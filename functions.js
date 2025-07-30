@@ -48,6 +48,21 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     window.location.href = "index.html";
   }
 
+
+
+
+  async function handlePapersClick() {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session || !session.user) {
+      window.location.href = "loginregister.html";
+      return;
+    }
+
+    window.location.href = "profile.html?tab=mypapers";
+  }
+
+
   
 
   // Register Login ----------------------------------------------------------------------------
@@ -566,4 +581,14 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
 
+
+// LOGS
+
+function logPageVisit(pageName = window.location.pathname.split("/").pop()) {
+  fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/log-visit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ page: pageName })
+  }).catch(err => console.error("Log error:", err));
+}
 
