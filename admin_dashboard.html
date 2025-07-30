@@ -61,7 +61,20 @@
     <div class="tab-content" id="analytics">
       <h3>Google Analytics Overview</h3>
       <button class="paper-btn" id="ga-login">Sign in with Google</button>
+      <div id="ga-extras" style="display:none; margin-top: 40px;">
+        <h4>📊 Top Pages</h4>
+        <ul id="topPagesList"></ul>
+
+        <h4>🌍 Top Countries</h4>
+        <ul id="topCountriesList"></ul>
+
+        <h4>👥 Unique Users</h4>
+        <div id="uniqueUsers" style="font-weight: bold; font-size: 18px;"></div>
+      </div>
       <canvas id="gaChart" width="100%" height="300" style="margin-top:20px;"></canvas>
+
+
+
     </div>
 
 
@@ -257,26 +270,84 @@
     };
 
     async function fetchGA4Data() {
-      const today = new Date().toISOString().split("T")[0];
-      const lastWeek = new Date(Date.now() - 6 * 86400000).toISOString().split("T")[0];
+      const headers = {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json"
+      };
 
-      const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`, {
+      const endpoint = `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`;
+
+      // 1. Chart (Active Users per day)
+      const usersRes = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json"
-        },
+        headers,
         body: JSON.stringify({
-          dateRanges: [{ startDate: "2025-01-01", endDate: "today" }],
+          dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
           dimensions: [{ name: "date" }],
           metrics: [{ name: "activeUsers" }]
         })
       });
+      const usersJson = await usersRes.json();
+      if (usersJson.rows) renderGAChart(usersJson.rows);
 
-      const json = await res.json();
-      if (json.rows) renderGAChart(json.rows);
-      else alert("❌ No data or error fetching GA4 data.");
+      // 2. Unique users (7 days)
+      const uniqueRes = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
+          metrics: [{ name: "activeUsers" }]
+        })
+      });
+      const uniqueJson = await uniqueRes.json();
+      document.getElementById("uniqueUsers").innerText = uniqueJson?.rows?.[0]?.metricValues?.[0]?.value || "0";
+
+      // 3. Top Pages
+      const pagesRes = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
+          dimensions: [{ name: "pagePath" }],
+          metrics: [{ name: "screenPageViews" }],
+          orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
+          limit: 5
+        })
+      });
+      const pagesJson = await pagesRes.json();
+      const topPagesList = document.getElementById("topPagesList");
+      topPagesList.innerHTML = "";
+      (pagesJson?.rows || []).forEach(row => {
+        const path = row.dimensionValues[0].value;
+        const views = row.metricValues[0].value;
+        topPagesList.innerHTML += `<li>${path} - ${views} views</li>`;
+      });
+
+      // 4. Top Countries
+      const countriesRes = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
+          dimensions: [{ name: "country" }],
+          metrics: [{ name: "activeUsers" }],
+          orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+          limit: 5
+        })
+      });
+      const countriesJson = await countriesRes.json();
+      const topCountriesList = document.getElementById("topCountriesList");
+      topCountriesList.innerHTML = "";
+      (countriesJson?.rows || []).forEach(row => {
+        const country = row.dimensionValues[0].value;
+        const count = row.metricValues[0].value;
+        topCountriesList.innerHTML += `<li>${country} - ${count} users</li>`;
+      });
+
+      // show UI
+      document.getElementById("ga-extras").style.display = "block";
     }
+
 
     function renderGAChart(rows) {
       const labels = rows.map(row => {
