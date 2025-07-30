@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    body {
+      display: none;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -81,6 +87,8 @@
       if (error || !session || !session.user || !allowedAdmins.includes(session.user.id)) {
         window.location.href = "404.html";
         return;
+      } else {
+        document.body.style.display = "block";
       }
 
       const res = await fetch("https://yezofyfuitlebwjdffwb.supabase.co/functions/v1/admin-dashboard");
