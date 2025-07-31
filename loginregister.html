@@ -21,13 +21,17 @@
 
         <input type="email" id="log-email" name="email" placeholder="Email" required>
         <input type="password" id="log-password" name="password" placeholder="Password" required>
+        
+        <!-- hCaptcha widget -->
+        <div class="h-captcha" style="height: 72px;" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
+        
         <button type="submit" onclick="login()">Login</button>
         <br>
-        <a href="#" onclick="showResetForm()" style="font-size: 13px;">Forgot Password?</a>
+        <a href="#" id="reset-link" onclick="showResetForm()" style="font-size: 13px;">Forgot Password?</a>
 
         <div id="resetForm" style="display:none; margin-top: 10px;">
-          <input type="email" id="resetEmail" placeholder="Enter your email" />
-          <button onclick="sendResetLink()">Send Reset Link</button>
+          <input type="email" id="resetEmail" placeholder="Enter your email" style="margin-top: 0;" />
+          <button onclick="sendResetLink()" style="margin-top: 0;">Send Reset Link</button>
         </div>
 
         <div id="result"></div>
@@ -52,7 +56,6 @@
 
         <!-- hCaptcha widget -->
         <div class="h-captcha" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
-
 
         <button type="submit" onclick="register()">Submit</button>
 

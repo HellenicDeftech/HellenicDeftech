@@ -71,6 +71,8 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const fullName = document.getElementById('reg-fullname').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
+    const captchaToken = document.querySelector('[name="h-captcha-response"]')?.value;
+
 
     if (!fullName || !email || !password) {
       alert("Please enter full name, email and password.");
@@ -79,8 +81,12 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const { data, error } = await supabase.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        captchaToken: captchaToken
+      }
     });
+
 
     if (error) {
       alert("Error registering: " + error.message);
@@ -168,6 +174,8 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const email = document.getElementById('log-email').value.trim();
       const password = document.getElementById('log-password').value;
 
+      const captchaToken = document.querySelector('[name="h-captcha-response"]')?.value;
+
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "";
 
@@ -176,7 +184,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         return;
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } });
 
       if (error) {
         alert("Error logging in: " + error.message);
@@ -289,6 +297,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function showResetForm() {
       document.getElementById("resetForm").style.display = "block";
+      document.getElementById("reset-link").style.display = "none";
     }
 
     async function sendResetLink() {
