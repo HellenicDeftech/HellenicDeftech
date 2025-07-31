@@ -134,7 +134,7 @@ body {
 }
 
 .navbar {
-    margin-left: 85px;
+    margin-left: 80px;
     display: flex;
     align-items: center;
 }
@@ -157,6 +157,7 @@ body {
   cursor: pointer;
   color: white;
   font-weight: bold;
+  right: 0;
 }
 
 .dropdown-menu {
@@ -328,6 +329,15 @@ body {
 .home-text p {
     font-size: 18px;
     color: #ebebeb;
+}
+
+.home-img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translateZ(-0.5px) scale(1.5) translateY(-10%);
+    
+    transform-style: preserve-3d;
 }
 
 
@@ -525,12 +535,54 @@ canvas{
 
 
 
-
-
-
 /*----------- Media Queries ----------*/
 
-@media screen and (max-width: 800px) {
+
+@media screen and (max-width: 1000px) and (min-width: 780px) {
+
+    .navbar-container {
+        font-size: 15px ;
+    }
+
+    .navbar-container img{
+        width: 75px;
+        height: auto;
+    }
+
+    .navbar {
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar ul{
+        gap: 15px;
+    }
+
+
+    .home-text h1 {
+        font-size: 80px;
+        max-width: 700px;
+    }
+
+    .organizers {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .organizers iframe {
+        width: 380px;
+        height: 220px;
+    }
+
+    #location iframe {
+        width: 560px;
+        height: 280px;
+    }
+    
+}
+
+@media screen and (max-width: 780px) {
 
     .navbar-container {
         display: none;
