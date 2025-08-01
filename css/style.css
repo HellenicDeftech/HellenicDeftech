@@ -267,16 +267,19 @@ body {
     color: white;
     text-decoration: none;
     cursor: pointer;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     
-    width: 166px;
+    width: 90px;
 }
 
 .mobile-nav-logreg {
     background-color: #c2c2c286;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
     border: 2px solid #696969;
     border-radius: 10px;
-    width: 180px;
+    width: 150px;
     margin : 0 auto;
 
 }

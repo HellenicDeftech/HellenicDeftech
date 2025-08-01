@@ -67,12 +67,19 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // Register Login ----------------------------------------------------------------------------
 
+  let registerCaptchaReady = false;
+
+  function onRegisterCaptchaReady() {
+    registerCaptchaReady = true;
+  }
+
+
   async function register() {
     const fullName = document.getElementById('reg-fullname').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
-    const registerCaptchaToken = hcaptcha.getResponse();
 
+    const registerCaptchaToken = hcaptcha.getResponse(registerWidgetId);
 
     if (!fullName || !email || !password) {
       alert("Please enter full name, email and password.");
@@ -175,7 +182,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const email = document.getElementById('log-email').value.trim();
       const password = document.getElementById('log-password').value;
 
-      const loginCaptchaToken = hcaptcha.getResponse();
+      const loginCaptchaToken = hcaptcha.getResponse(loginWidgetId);
 
 
       const resultDiv = document.getElementById('result');
