@@ -71,7 +71,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const fullName = document.getElementById('reg-fullname').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
-    const captchaToken = document.querySelector('[name="h-captcha-response"]')?.value;
+    const registerCaptchaToken = hcaptcha.getResponse();
 
 
     if (!fullName || !email || !password) {
@@ -83,7 +83,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       email,
       password,
       options: {
-        captchaToken: captchaToken
+        captchaToken: registerCaptchaToken
       }
     });
 
@@ -164,6 +164,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }, 300);
 
     alert("Registration successful! Please check your email.");
+    // hcaptcha.reset();
   }
 
 
@@ -174,7 +175,8 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const email = document.getElementById('log-email').value.trim();
       const password = document.getElementById('log-password').value;
 
-      const captchaToken = document.querySelector('[name="h-captcha-response"]')?.value;
+      const loginCaptchaToken = hcaptcha.getResponse();
+
 
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "";
@@ -184,7 +186,10 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         return;
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } });
+      const { data, error } = await supabase.auth.signInWithPassword({ 
+        email, password, 
+        options: { captchaToken: loginCaptchaToken } 
+      });
 
       if (error) {
         alert("Error logging in: " + error.message);

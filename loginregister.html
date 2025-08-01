@@ -7,6 +7,7 @@
   <link rel="shortcut icon" href="#">
   <link rel="stylesheet" href="css/logreg.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
   <script src="https://hcaptcha.com/1/api.js" async defer></script>
 </head>
 <div class="container" id="container">
@@ -23,7 +24,7 @@
         <input type="password" id="log-password" name="password" placeholder="Password" required>
         
         <!-- hCaptcha widget -->
-        <div class="h-captcha" style="height: 72px;" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
+        <div id="login-hcaptcha" class="h-captcha" style="height: 72px;" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
         
         <button type="submit" onclick="login()">Login</button>
         <br>
@@ -55,7 +56,7 @@
         <input type="password" id="reg-password" placeholder="Password" required> 
 
         <!-- hCaptcha widget -->
-        <div class="h-captcha" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
+        <div id="register-hcaptcha" class="h-captcha" data-sitekey="02ec42ba-482a-4252-8c36-296c9f1eeb22"></div>
 
         <button type="submit" onclick="register()">Submit</button>
 
