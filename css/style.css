@@ -343,6 +343,9 @@ body {
     transform-style: preserve-3d;
 }
 
+h2 {
+    font-size: 30px;
+}
 
 
 /*----------- about section ----------*/

@@ -83,6 +83,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     if (!fullName || !email || !password) {
       alert("Please enter full name, email and password.");
+      hcaptcha.reset();
       return;
     }
 
@@ -97,7 +98,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     if (error) {
       alert("Error registering: " + error.message);
-      console.error(error);
+      hcaptcha.reset();
       return;
     }
 
@@ -171,7 +172,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }, 300);
 
     alert("Registration successful! Please check your email.");
-    // hcaptcha.reset();
   }
 
 
@@ -190,6 +190,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       if (!email || !password) {
         alert("Please enter email and password.");
+        hcaptcha.reset();
         return;
       }
 
@@ -200,10 +201,11 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       if (error) {
         alert("Error logging in: " + error.message);
+        hcaptcha.reset();
         return;
       }
 
-      const name = data.user.user_metadata?.full_name || "User";
+      const name = data.user.user_metadata?.full_name;
       resultDiv.innerHTML = `<p>Welcome ${name}! Redirecting...</p>`;
       setTimeout(() => window.location.href = "index.html", 2000);
     }
