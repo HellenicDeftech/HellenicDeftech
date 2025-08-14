@@ -301,9 +301,14 @@ body {
     
     padding: 40px;
     border-radius: 50%;
-    transform: translateZ(-0.5px) scale(1.5) translateY(-10%);
+    transform: translateZ(-0.5px) scale(1.5) translateY(-10%) translateX(-40%);
     
     transform-style: preserve-3d;
+    left : 0;
+}
+
+.home-text img {
+    width: 850px;
 }
 
 .home-text h1 {
@@ -329,19 +334,6 @@ body {
     
 }
 
-.home-text p {
-    font-size: 18px;
-    color: #ebebeb;
-}
-
-.home-img {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    transform: translateZ(-0.5px) scale(1.5) translateY(-10%);
-    
-    transform-style: preserve-3d;
-}
 
 h2 {
     font-size: 30px;
@@ -464,6 +456,10 @@ h2 {
 .social-icons i {
     margin: 8px;
     cursor: pointer;
+}
+
+.social-icons a {
+    color: #fff;
 }
 
 
