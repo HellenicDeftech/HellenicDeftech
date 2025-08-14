@@ -364,8 +364,8 @@ h2 {
 
 
 /*----------- contact section ----------*/
-#sponsorForm input,
-#sponsorForm textarea {
+#supportForm input,
+#supportForm textarea {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -374,7 +374,7 @@ h2 {
     font-size: 14px;
 }
 
-#sponsorForm button {
+#supportForm button {
     margin-top: 15px;
     background-color: #0074d9;
     color: white;
@@ -385,7 +385,7 @@ h2 {
     cursor: pointer;
 }
 
-#sponsorPopup {
+#supportPopup {
     position: fixed;
     top: 0;
     left: 0;
@@ -402,7 +402,7 @@ h2 {
     transition: opacity 0.3s ease;
 }
 
-#sponsorPopup.popup-visible {
+#supportPopup.popup-visible {
         opacity: 1;
   pointer-events: auto;
 }

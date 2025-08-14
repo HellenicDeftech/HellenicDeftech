@@ -178,8 +178,8 @@
                 and innovation.
             </p>
             <p>
-                Contact us at <a href="#">hellenicdeftech@gmail.com</a> or <a href="#" onclick="openSponsorPopup()"
-                    class="sponsor-link">fill out the sponsorship form</a>.
+                Contact us at <a href="#">hellenicdeftech@gmail.com</a> or <a href="#" onclick="openSupportPopup()"
+                    class="support-link">fill out the sponsorship form</a>.
             </p>
 
         </section>
@@ -215,18 +215,18 @@
     </div>
 
 
-    <div id="sponsorPopup" class="popup-hidden">
+    <div id="supportPopup" class="popup-hidden">
         <div class="popup-box">
-            <button onclick="closeSponsorPopup()" class="popup-close">×</button>
+            <button onclick="closeSupportPopup()" class="popup-close">×</button>
             <h3>Become a Sponsor</h3>
-            <form id="sponsorForm">
-                <input type="text" id="sponsorName" placeholder="Your Name" required>
-                <input type="email" id="sponsorEmail" placeholder="Your Email" required>
-                <input type="text" id="sponsorCompany" placeholder="Company Name" required>
-                <textarea id="sponsorMessage" placeholder="Your Message" rows="4" required></textarea>
+            <form id="supportForm">
+                <input type="text" id="supportName" placeholder="Your Name" required>
+                <input type="email" id="supportEmail" placeholder="Your Email" required>
+                <input type="text" id="supportCompany" placeholder="Company Name" required>
+                <textarea id="supportMessage" placeholder="Your Message" rows="4" required></textarea>
                 <button type="submit">Submit</button>
             </form>
-            <p id="sponsorResponse" style="margin-top:10px; font-weight:bold;"></p>
+            <p id="supportResponse" style="margin-top:10px; font-weight:bold;"></p>
         </div>
     </div>
 
@@ -255,26 +255,26 @@
         });
 
         // sponsor popup
-        function openSponsorPopup() {
-            document.getElementById("sponsorPopup").classList.add("popup-visible");
-            document.getElementById("sponsorPopup").classList.remove("popup-hidden");
+        function openSupportPopup() {
+            document.getElementById("supportPopup").classList.add("popup-visible");
+            document.getElementById("supportPopup").classList.remove("popup-hidden");
         }
 
-        function closeSponsorPopup() {
-            document.getElementById("sponsorPopup").classList.remove("popup-visible");
-            document.getElementById("sponsorPopup").classList.add("popup-hidden");
+        function closeSupportPopup() {
+            document.getElementById("supportPopup").classList.remove("popup-visible");
+            document.getElementById("supportPopup").classList.add("popup-hidden");
         }
 
 
         // Sponsor form email
-        document.getElementById("sponsorForm").addEventListener("submit", async function (e) {
+        document.getElementById("supportForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            const name = document.getElementById("sponsorName").value.trim();
-            const email = document.getElementById("sponsorEmail").value.trim();
-            const company = document.getElementById("sponsorCompany").value.trim();
-            const message = document.getElementById("sponsorMessage").value.trim();
-            const status = document.getElementById("sponsorResponse");
+            const name = document.getElementById("supportName").value.trim();
+            const email = document.getElementById("supportEmail").value.trim();
+            const company = document.getElementById("supportCompany").value.trim();
+            const message = document.getElementById("supportMessage").value.trim();
+            const status = document.getElementById("supportResponse");
 
             if (!name || !email || !company || !message) {
                 status.textContent = "Please fill in all fields.";
@@ -297,7 +297,7 @@
                 if (response.ok) {
                     status.textContent = "✅ Thank you! We'll contact you soon.";
                     status.style.color = "green";
-                    document.getElementById("sponsorForm").reset();
+                    document.getElementById("supportForm").reset();
                 } else {
                     const err = await response.json();
                     status.textContent = "❌ Failed to send.";
