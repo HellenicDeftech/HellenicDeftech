@@ -100,14 +100,20 @@ p {
 }
 
 .parallax::before {
-    content: "";
-    width: 100%;
+    content:"";
+    width:100%;
     height: 100%;
     position: absolute;
-    background: url("../images/samos_backg.jpeg") top center;
+    background-image: url("../images/deftech_back1.png");
+    filter: blur(2px);
     background-size: cover;
+    background-position: top center;
     transform: translateZ(-1px) scale(2.15);
+    /* transition: background-image 1s ease-in-out; */
 }
+
+
+
 
 
 .content-section {
@@ -364,10 +370,10 @@ p {
 /*----------- home section ----------*/
 
 .home-text {
-
+    
     padding: 40px;
     border-radius: 50%;
-    transform: translateZ(-0.5px) scale(1.5) translateY(-10%);
+    transform: translateZ(-0.5px) scale(1.5) translateY(-10%) translateX(10%);
 
     transform-style: preserve-3d;
     left: 0;
@@ -378,7 +384,7 @@ p {
     max-width: 900px;   /* ποτέ πάνω από 850px */
     height: auto;
     animation: heroLeft 1s ease-out forwards;
-    animation-delay: 2s;
+    animation-delay: 4s;
 }
 
 
@@ -438,7 +444,7 @@ p {
     }
 
     100% {
-        transform: translateX(-40%);
+        transform: translateX(-50%);
     }
 }
 

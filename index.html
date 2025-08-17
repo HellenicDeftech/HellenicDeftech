@@ -93,18 +93,16 @@
 
 
         <section class="parallax" id="home">
-            <!-- particles.js container -->
+            
             <div id="particles-js" style="position: absolute;"></div>
-
             <div class="home-text">
                 <img src="images/deftech_home_logo.png" alt="home-img">
             </div>
 
-
             <a href="loginregister.html" class="" id="reg-button">Register<i class="fa fa-arrow-right"></i></a>
 
-
         </section>
+
 
 
         <section class="content-section white" id="about">
@@ -337,6 +335,25 @@
                 regButton.classList.remove("hidden");
             }
         });
+
+        
+        document.addEventListener("DOMContentLoaded", function () {
+        const backgrounds = document.querySelectorAll('.background-slideshow .bg');
+        let current = 0;
+
+        function fadeToNextBackground() {
+            backgrounds[current].classList.remove('active');
+            current = (current + 1) % backgrounds.length;
+            backgrounds[current].classList.add('active');
+        }
+
+        if (backgrounds.length > 0) {
+            backgrounds[0].classList.add('active');   
+            setInterval(fadeToNextBackground, 4000);  
+        }
+        });
+
+
 
 
         // sponsor popup
